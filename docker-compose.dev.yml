@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  dotnetapp:
+    image: dotnetapp
+    container_name: dotnetapp
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: unless-stopped
+
+  nodeapp:
+    image: nodeapp
+    container_name: nodeapp
+    restart: unless-stopped
+    depends_on:
+      - mongo
+      - dotnetapp
+    environment:
+      CALCULATOR_URL: http://dotnetapp
+      MONGODB_URL: mongodb://mongo:27017
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    depends_on:
+      - dotnetapp
+      - nodeapp
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx/app.dev.conf:/etc/nginx/conf.d/app.conf:ro

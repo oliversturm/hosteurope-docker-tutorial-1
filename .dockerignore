@@ -1,0 +1,5 @@
+DotNetApp/bin
+DotNetApp/obj
+NodeApp/node_modules
+NodeApp/build
+NodeApp/.svelte-kit
